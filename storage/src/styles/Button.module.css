@@ -1,0 +1,27 @@
+.btn{
+    width: 33px;
+    height: 33px;
+    background-color: white;
+    border-radius: 50%;
+    border: none;
+    padding: 5px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.btn:hover{
+    /* background-image: linear-gradient(75deg, #d0d0d0, #f2f2f2, rgb(243, 243, 243)); */
+}
+.edit{
+    color: rgb(43, 223, 118);
+}
+.edit:hover{
+    color: white;
+    background-color: rgb(43, 223, 118);
+}
+.delete{
+    color: rgb(201, 63, 63);
+}
+.delete:hover{
+    color: white;
+    background-color: rgb(230, 96, 96);
+}

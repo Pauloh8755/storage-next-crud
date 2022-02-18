@@ -1,0 +1,26 @@
+.fileImage{
+    display: none;
+}
+.plusImage,.labelImage{
+    width: 100%;
+    height: 290px;
+    background-color: rgb(232, 232, 232);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 100px;
+    cursor: pointer;
+    /* border: 1px solid rgb(194, 194, 194); */
+    border-radius: 4px;
+}
+.labelImage{
+    padding: 0px;
+    background-color: transparent;
+    
+}
+.image{
+    width: 100%;
+    height: 100%;
+    object-fit:cover;
+    border: 1px solid rgb(194, 194, 194);
+}

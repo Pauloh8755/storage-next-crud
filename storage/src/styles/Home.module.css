@@ -1,0 +1,15 @@
+.container{
+  width: 100vw;
+  height: 100vh;
+}
+.header{
+  background-color: #1a73e8;
+  height: 35vh;
+  padding: 15px;
+}
+.back{
+  background-color: rgb(248, 248, 248);
+  height: 65vh;
+  display: flex;
+  justify-content: center;
+}

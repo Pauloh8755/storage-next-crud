@@ -1,0 +1,12 @@
+.title{
+    font-size: 1.7rem;
+    font-family: 'Poppins';
+    color: rgb(55, 55, 55);
+    font-weight: 500;
+}
+.line{
+    width: 100px;
+    height: 7px;
+    background-image: linear-gradient(to right, #1a73e8, #6fa2e4);
+    border-radius: 5px;
+}
