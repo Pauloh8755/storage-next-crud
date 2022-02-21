@@ -16,6 +16,7 @@ export default function Home() {
   
   const [img, setImg] = useState(plus)
   const [text, setText] = useState("")
+  const [edit, setEdit] = useState(false)
   const [status, setStatus] = useState({display: false, message: false})
 
   const clearField = () =>{
@@ -30,7 +31,11 @@ export default function Home() {
     return ()=>clearTimeout(id)
   }, [status.display])
 
-
+  const fillInputs = (title, url) =>{
+    setText(title)
+    setImg(url)
+    setEdit(true)
+  }
 
   const extensionFilter = ({name}) =>{
     const lastDot = name.lastIndexOf(".");
@@ -48,8 +53,11 @@ export default function Home() {
     //recebendo url para acessar arquivo
     const url = await getDownloadURL(ref(storage, `/files/${name}`))
     //chamando função para salvar dados no banco
-    setStatus({display: true, message: await salvar(text,url)})
+    setStatus({display: true, message: await salvar(text,url,name) === true? "imagem cadastrada com sucesso": "falha ao cadastrar Imagem"})
     clearField()
+  }
+  const updateImage = () =>{
+return false
   }
 
   return (
@@ -57,21 +65,20 @@ export default function Home() {
       
       <div className={styles.header}>
         {status.display?
-          <Dialog text={status.message? "imagem cadastrada com sucesso"
-          :"falha ao cadastrar Imagem"} 
+          <Dialog text={status.message}
             displayColor={status.message?"#95e8b0": "#e6a9a9"}
             color={status.message?"#11873c": "#9c3636"}
             status={status.message}
           />
         :false}
-        <InsertPreview status={status.display}/>
+        <InsertPreview status={status.display} edit={fillInputs} delete={setStatus}/>
     
       </div>
       <div className={styles.back}>
         <Main title="Cadastro de Imagens">
             <InputText text={text} setText={setText} placeholder="Digite o nome da imagem"/>
             <InputImage img={img} setImg={setImg}/>
-            <SaveButton img={img}  upload={uploadImage}/>
+            <SaveButton img={img}  onClick={edit? updateImage :uploadImage} edit={edit}/>
         </Main>
       </div>
     </div>

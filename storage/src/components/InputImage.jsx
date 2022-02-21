@@ -7,7 +7,7 @@ const InputImage = ({img, setImg}) =>{
             <input className={styles.fileImage} id="file-img" type="file" name="imageFile" onChange={e=> setImg(e.target.files[0])}/>
             <label htmlFor="file-img">
                 <div className={img === plus?styles.plusImage: styles.labelImage}>
-                    {img === plus? plus : <img className={styles.image} src={URL.createObjectURL(img)} alt="imagem"/>}
+                    {img === plus? plus : <img className={styles.image} src={typeof img === "object"?URL.createObjectURL(img): img} alt="imagem"/>}
                 </div>
             </label>
         </div>

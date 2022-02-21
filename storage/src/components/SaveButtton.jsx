@@ -1,9 +1,9 @@
 import style from '../styles/SaveButton.module.css'
 
-const SaveButton = ({upload,img}) =>{
+const SaveButton = ({onClick,img,edit}) =>{
     return(
-        <button className={style.button} onClick={()=>upload(img)}>
-            Cadastrar
+        <button className={style.button} onClick={()=>onClick(img)}>
+            {edit === true? "Atualizar": "Cadastrar"}
         </button>
     )
 }
