@@ -11,13 +11,16 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import salvar from '../backend/imageController'
 import Dialog from '../components/Dialog'
 import { v4 as uuidv4 } from 'uuid';
+import { updateImage } from '../backend/imageController'
 
 export default function Home() {
   
   const [img, setImg] = useState(plus)
+  const [nameImage, setNameImage] = useState("")
+  const [id, setId] = useState("")
   const [text, setText] = useState("")
   const [edit, setEdit] = useState(false)
-  const [status, setStatus] = useState({display: false, message: false})
+  const [status, setStatus] = useState({display: false, message: "", error: false})
 
   const clearField = () =>{
     setText("")
@@ -31,9 +34,12 @@ export default function Home() {
     return ()=>clearTimeout(id)
   }, [status.display])
 
-  const fillInputs = (title, url) =>{
+  const fillInputs = ({title, url, name,id}) =>{
+    setId(id)
     setText(title)
     setImg(url)
+    setNameImage(name)
+    
     setEdit(true)
   }
 
@@ -41,8 +47,6 @@ export default function Home() {
     const lastDot = name.lastIndexOf(".");
     return name.substring(lastDot, name.length)
   }
-
-  //function de upload da imagem para o storage
   const uploadImage = async (img) =>{
     const extension = extensionFilter(img)
     const name = `${uuidv4()}${extension}`
@@ -51,13 +55,30 @@ export default function Home() {
     //realizando upload
     await uploadBytesResumable(storageRef, img)
     //recebendo url para acessar arquivo
-    const url = await getDownloadURL(ref(storage, `/files/${name}`))
-    //chamando função para salvar dados no banco
-    setStatus({display: true, message: await salvar(text,url,name) === true? "imagem cadastrada com sucesso": "falha ao cadastrar Imagem"})
-    clearField()
+    const imgUrl = await getDownloadURL(ref(storage, `/files/${name}`))
+    console.log(name,imgUrl)
+    return {
+      name: name,
+      url: imgUrl
+    }
   }
-  const updateImage = () =>{
-return false
+  //function de upload da imagem para o storage
+  const handlerUpdate = async () =>{
+    if(typeof img =="object"){
+      const {name,url}= uploadImage(img)
+      console.log(url)
+      setNameImage(name)
+      setImg(url)
+    }
+    console.log(img)
+      updateImage(text,img,nameImage,id,setStatus)
+  }
+
+  const handlerInsert = async () =>{
+    const {name,url} = await uploadImage(img)
+    salvar(text,url,name,setStatus)
+    
+    clearField()
   }
 
   return (
@@ -66,9 +87,9 @@ return false
       <div className={styles.header}>
         {status.display?
           <Dialog text={status.message}
-            displayColor={status.message?"#95e8b0": "#e6a9a9"}
-            color={status.message?"#11873c": "#9c3636"}
-            status={status.message}
+            displayColor={status.error?"#95e8b0": "#e6a9a9"}
+            color={status.error?"#11873c": "#9c3636"}
+            status={status.error}
           />
         :false}
         <InsertPreview status={status.display} edit={fillInputs} delete={setStatus}/>
@@ -78,7 +99,7 @@ return false
         <Main title="Cadastro de Imagens">
             <InputText text={text} setText={setText} placeholder="Digite o nome da imagem"/>
             <InputImage img={img} setImg={setImg}/>
-            <SaveButton img={img}  onClick={edit? updateImage :uploadImage} edit={edit}/>
+            <SaveButton  onClick={edit? handlerUpdate :handlerInsert} edit={edit}/>
         </Main>
       </div>
     </div>

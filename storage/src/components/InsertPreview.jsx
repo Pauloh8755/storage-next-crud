@@ -15,14 +15,14 @@ const InsertPreview = (props) =>{
         useEffect(()=>{
             buscar().then(setData)
         },[props.status])
-
         return data.map((image, i)=>{
+            
             return(
                 <div key={i} className={style.container}>
                     <div className={style.preview}>
                         <Text text={image.title}/>
                         <div>
-                            <Button onClick={()=>props.edit(image.title, image.url)}>{EditIcon}</Button>
+                            <Button onClick={()=>props.edit(image)}>{EditIcon}</Button>
                             <Button type="delete" onClick={()=>deletar(image.id, image.url, props.delete)}>{TrashIcon}</Button>
                         </div>
                     </div>
