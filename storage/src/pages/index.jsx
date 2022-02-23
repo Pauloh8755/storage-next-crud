@@ -25,6 +25,9 @@ export default function Home() {
   const clearField = () =>{
     setText("")
     setImg(plus)
+    setNameImage("name")
+    setId("")
+    setEdit(false)
   }
 
   useEffect(()=>{
@@ -47,7 +50,7 @@ export default function Home() {
     const lastDot = name.lastIndexOf(".");
     return name.substring(lastDot, name.length)
   }
-  const uploadImage = async (img) =>{
+  const uploadImage = async () =>{
     const extension = extensionFilter(img)
     const name = `${uuidv4()}${extension}`
     //recebendo referencia(local onde será salvo/nome do arquivo)
@@ -56,29 +59,33 @@ export default function Home() {
     await uploadBytesResumable(storageRef, img)
     //recebendo url para acessar arquivo
     const imgUrl = await getDownloadURL(ref(storage, `/files/${name}`))
-    console.log(name,imgUrl)
     return {
       name: name,
       url: imgUrl
     }
   }
   //function de upload da imagem para o storage
-  const handlerUpdate = async () =>{
+  const handlerUpdate = async() =>{
     if(typeof img =="object"){
-      const {name,url}= uploadImage(img)
-      console.log(url)
+      const {name,url}= await uploadImage()
       setNameImage(name)
-      setImg(url)
+      updateImage(text,url,nameImage,id,setStatus)
+      clearField()
+      return
     }
-    console.log(img)
-      updateImage(text,img,nameImage,id,setStatus)
-  }
-
-  const handlerInsert = async () =>{
-    const {name,url} = await uploadImage(img)
-    salvar(text,url,name,setStatus)
-    
+    updateImage(text,img,nameImage,id,setStatus)
     clearField()
+
+  }
+  const handlerInsert = async () =>{
+    if(text === ""){
+      setStatus({display: true, message:"Por favor preencha o titulo da imagem"})
+    }
+    else{
+      const {name,url} = await uploadImage(img)
+      salvar(text,url,name,setStatus)
+      clearField()
+    }
   }
 
   return (

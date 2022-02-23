@@ -36,8 +36,10 @@ const updateImage = (title, url, name, id,setStatus)=>{
     const updates ={}
     updates[`image/${id}`] = data
     update(ref(db),updates)
+    setStatus({display: true, message:"imagem atualizada com sucesso", error: true})
   }catch(e){
     console.log(e)
+    setStatus({display: true, message:"falha ao atualizar Imagem"})
   }
 }
 

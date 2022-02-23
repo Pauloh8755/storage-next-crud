@@ -15,7 +15,7 @@
 .imgPreview{
     width: 120px;
     height: 70px;
-    background-color: rgb(170, 170, 170);
+    background-color: rgb(237, 237, 237);
     object-fit: cover;
     border: solid 1px rgb(191, 191, 191);
 }
